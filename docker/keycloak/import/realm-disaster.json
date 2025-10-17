@@ -1,0 +1,74 @@
+{
+  "realm": "camel-realm",
+  "enabled": true,
+  "roles": {
+    "realm": [
+      {
+        "name": "USER"
+      },
+      {
+        "name": "ADMIN"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "camel-console",
+      "bearerOnly": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "camel-api-secret"
+    },
+    {
+      "clientId": "camel-api",
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": [
+        "http://localhost:*/*"
+      ],
+      "webOrigins": [
+        "http://localhost:*"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "admin@example.com",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "admin1@example.com",
+      "firstName": "Admin",
+      "lastName": "One",
+      "realmRoles": [
+        "ADMIN"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin123",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "user",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "user@example.com",
+      "firstName": "User",
+      "lastName": "One",
+      "realmRoles": [
+        "USER"
+      ],
+      "credentials": [
+        {
+          "type": "password",
+          "value": "user1234",
+          "temporary": false
+        }
+      ]
+    }
+  ]
+}

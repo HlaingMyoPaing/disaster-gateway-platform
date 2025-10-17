@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+    <!-- === Base Spring Boot logging === -->
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <!-- === Log file locations (mounted writable in Docker) === -->
+    <property name="LOG_DIR" value="/opt/app/logs"/>
+
+    <!-- === Console output === -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- === Application log (INFO/DEBUG) === -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/disaster-gateway-core.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/disaster-gateway-core.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- === Error log (only ERROR level) === -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/disaster-gateway-core-error.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/disaster-gateway-core-error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- === Custom package log levels === -->
+    <logger name="org.apache.camel" level="INFO"/>
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.hibernate" level="WARN"/>
+
+    <!-- === Reduce Tomcat noise === -->
+    <logger name="org.apache.coyote.http11.Http11InputBuffer" level="ERROR"/>
+    <logger name="org.apache.coyote.http11.Http11Processor" level="WARN"/>
+    <logger name="org.apache.tomcat.util.compat" level="WARN"/>
+    <logger name="org.apache.coyote" level="WARN"/>
+    <logger name="org.apache.catalina.core.AprLifecycleListener" level="WARN"/>
+
+    <!-- === Root logger: includes INFO, DEBUG, ERROR === -->
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+
+</configuration>

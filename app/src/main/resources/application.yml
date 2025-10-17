@@ -1,0 +1,50 @@
+# ───────────────────────────────────────────────────────────────
+# Server Configuration
+# ───────────────────────────────────────────────────────────────
+server:
+  port: ${SERVER_PORT:8088}                 # Default HTTP port (can override via env var)
+  address: ${SERVER_ADDRESS:0.0.0.0}        # Bind to all interfaces
+  forward-headers-strategy: framework       # Needed for reverse proxy headers (e.g. X-Forwarded-*)
+
+# ───────────────────────────────────────────────────────────────
+# Spring Configuration
+# ───────────────────────────────────────────────────────────────
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://app-postgres:5432/disaster}  # JDBC URL
+    username: ${SPRING_DATASOURCE_USERNAME:app}                                 # DB username
+    password: ${SPRING_DATASOURCE_PASSWORD:app}                                 # DB password
+
+  security:
+    roles:
+      admin: ${ROLE_ADMIN}                      # Role name required to access `/api/admin/**`
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OIDC_ISSUER_URI:http://host.docker.internal:8080/realms/camel-realm}
+          # OpenID Connect issuer URI for JWT validation (Keycloak realm)
+
+# ───────────────────────────────────────────────────────────────
+# Keycloak Client Configuration
+# ───────────────────────────────────────────────────────────────
+keycloak:
+  client-id: ${KEYCLOAK_CLIENT_ID}              # Keycloak client ID used in token parsing
+
+# ───────────────────────────────────────────────────────────────
+# Actuator & Monitoring (Spring Boot)
+# ───────────────────────────────────────────────────────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info                   # Only expose health & info endpoints over HTTP
+
+# ───────────────────────────────────────────────────────────────
+# Apache Camel Configuration
+# ───────────────────────────────────────────────────────────────
+camel:
+  springboot:
+    main-run-controller: true                  # Let Camel control the main application lifecycle
+  component:
+    platform-http:
+      enabled: true

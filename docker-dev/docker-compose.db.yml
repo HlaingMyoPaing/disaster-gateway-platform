@@ -1,0 +1,26 @@
+
+version: "3.9"
+name: diaster-gateway-dev-db
+networks: { app_net: { driver: bridge } }
+volumes: { app_pgdata: {} }
+
+services:
+  app-postgres:
+    image: postgis/postgis:16-3.5
+    container_name: dg-dev-app-postgres
+    environment:
+      POSTGRES_DB: ${APP_DB_NAME:-disaster}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - app_pgdata:/var/lib/postgresql/data
+      - ../docker/postgres/initdb:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "${APP_DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ${APP_DB_NAME:-disaster}"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    networks: [app_net]

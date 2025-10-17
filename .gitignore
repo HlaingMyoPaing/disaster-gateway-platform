@@ -1,0 +1,14 @@
+
+# Maven
+target/
+*.log
+*.iml
+.idea/
+*.class
+
+# OS
+.DS_Store
+
+# Docker volumes (local)
+pgdata/
+kc_pgdata/
