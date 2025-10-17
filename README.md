@@ -44,7 +44,7 @@ C:\Program Files (x86)\GnuWin32\bin
 git clone https://github.com/<your-org>/disaster-gateway-platform.git
 ```
 ```bash
-cd disaster-gateway
+cd disaster-gateway-platform
 ```
 
 ### Step 3: Start the Development Environment
