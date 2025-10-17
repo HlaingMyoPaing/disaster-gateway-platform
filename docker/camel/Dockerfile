@@ -18,7 +18,9 @@ RUN --mount=type=cache,target=/root/.m2 \
 COPY app/ ./app/
 
 RUN --mount=type=cache,target=/root/.m2 \
-    mvn -f app/pom.xml -B -DskipTests package
+    mvn -f app/pom.xml -B -DskipTests package && \
+    # copy the produced jar to a deterministic filename for the runtime stage
+    cp app/target/*.jar app/app.jar
 
 
 # ---------- RUNTIME STAGE ----------
@@ -28,17 +30,17 @@ FROM eclipse-temurin:21-jre
 ENV TZ=Asia/Tokyo \
     JAVA_OPTS="-XX:MaxRAMPercentage=75 -XX:+UseG1GC"
 
-# Create non-root user
-RUN addgroup --system app && adduser --system --ingroup app app
+# Create non-root user with a home directory
+RUN addgroup --system app && adduser --system --ingroup app --home /home/app app
 
 # Set working directory
 WORKDIR /opt/app
 
-# Copy built jar from build stage
-COPY --from=build /src/app/target/*.jar ./app.jar
+# Copy built jar from build stage and set ownership in a single layer
+COPY --from=build --chown=app:app /src/app/app.jar ./app.jar
 
-# Create logs directory and fix permissions
-RUN mkdir -p logs && chown -R app:app .
+# Create logs directory and ensure permissions (owned by app)
+RUN mkdir -p /opt/app/logs && chown -R app:app /opt/app
 
 # Switch to non-root user
 USER app
@@ -46,6 +48,5 @@ USER app
 # Expose application port
 EXPOSE 8088
 
-# Use exec form to ensure proper signal handling (e.g., SIGTERM)
-ENTRYPOINT ["java", "-jar", "app.jar"]
-CMD []
+# Use sh -c + exec so JAVA_OPTS are expanded and java becomes PID 1 (signal forwarding)
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar /opt/app/app.jar"]
