@@ -1,63 +1,65 @@
 # Disaster Gateway Platform – Dev Starter
 
-A disaster data processing gateway built with **Apache Camel**, running on **Spring Boot**, and secured using **Keycloak JWT**. The platform uses **PostgreSQL + PostGIS** for handling spatial data. It's fully containerized for local development using Docker Compose.
+A disaster data processing gateway built with **Apache Camel**, running on **Spring Boot**, and secured using **Keycloak JWT**. Uses **PostgreSQL + PostGIS** for spatial data. Fully containerized for local development using Docker Compose.
 
----
-## License
+## Table of Contents
+- Quick Start
+  - Prerequisites
+  - Start dev environment
+  - Useful URLs
+- Windows: install make
+- Troubleshooting
+- Stack Overview
+- License
 
-This project is proprietary. See [LICENSE](./LICENSE) for details.
+## Quick Start
 
+Prerequisites
+- Docker & Docker Compose
+- git
+- (Optional) make for simplified dev commands (see Windows section if on Windows)
 
-##  Stack Overview
-
-- ⚙️ **Apache Camel** (Spring Boot Starter)
-- 🛡 **Keycloak** (JWT Auth Provider)
-- 🗄 **PostgreSQL + PostGIS** (Spatial database)
-- 🐳 **Docker Compose** for local environment setup
-- 🧪 **Spring Boot Actuator** for health checks and monitoring
-
----
-
-## 🚀 Quick Start
-
-### Step 1: Install `make` (Windows Only)
-
-If you're on **Windows**, install `make` for running dev commands:
-
-#### 🛠 Install using Winget:
-
-```bash
-winget install GnuWin32.Make 
-```
-* Press Windows key → Search “Environment Variables” → Open “Edit the system environment variables”
-* Click Environment Variables…
-* Under System variables, find and select Path, then click Edit
-* Click New, then add the folder path where make.exe is located.
-
-Example : 
-```bash
-C:\Program Files (x86)\GnuWin32\bin
-```
-
-### Step 2: Clone the Repository
+Start the development environment
+1. Clone the repo:
 ```bash
 git clone https://github.com/<your-org>/disaster-gateway-platform.git
-```
-```bash
 cd disaster-gateway-platform
 ```
-
-### Step 3: Start the Development Environment
+2. Start containers (development):
 ```bash
-make up-dev 
+make up-dev
 ```
 
-### Step 4: Access the Services Via Proxy Server
+Useful URLs (local development)
+- API proxy: http://host.docker.internal:3001/api/public/hello
+- Keycloak Admin Console: http://host.docker.internal:8080
+
+## Windows: install `make`
+If you're on Windows and want to use the provided Makefile commands, install `make` (e.g. GnuWin32).
+
+Install using Winget:
 ```bash
-http://host.docker.internal:3001/api/public/hello
+winget install GnuWin32.Make
 ```
 
-### Step 5: Access Keycloak Admin Console
-```bash
-http://host.docker.internal:8080
-```
+Add the `make` binary folder to your PATH:
+- Press Windows key → Search “Environment Variables” → Open “Edit the system environment variables”
+- Click Environment Variables…
+- Under System variables, find and select Path, then click Edit
+- Click New, then add the folder path where make.exe is installed (e.g. `C:\Program Files (x86)\GnuWin32\bin`)
+
+## Troubleshooting (quick)
+- If services are unreachable, make sure Docker Desktop is running.
+- On Windows use `host.docker.internal` to reach containers from the host.
+- If Keycloak UI is not reachable, check container logs: `docker-compose logs keycloak` or `docker compose logs keycloak`
+- Database tools: connect to Postgres container via the exposed port or use psql inside the container.
+
+## Stack Overview
+- Apache Camel (Spring Boot Starter)
+- Keycloak (JWT Auth Provider)
+- PostgreSQL + PostGIS (Spatial database)
+- Docker Compose for local environment setup
+- Spring Boot Actuator for health checks and monitoring
+
+## License
+This project is proprietary. See [LICENSE](./LICENSE) for details.
