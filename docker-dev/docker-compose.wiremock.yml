@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: wiremock
     ports:
-      - "8081:8080"  # Host port : Container port
+      - "8081:8080" # Host 8081 -> Container 8080 (WireMock default)
     environment:
       - WIREMOCK_ROOT_DIR=/home/wiremock
     volumes:
