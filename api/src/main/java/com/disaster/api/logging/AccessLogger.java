@@ -1,4 +1,4 @@
-package com.disaster.gateway.logging;
+package com.disaster.api.logging;
 
 import org.apache.camel.Exchange;
 import org.slf4j.Logger;

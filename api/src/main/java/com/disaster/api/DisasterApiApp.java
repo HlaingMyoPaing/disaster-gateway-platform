@@ -1,12 +1,12 @@
 
-package com.disaster.gateway;
+package com.disaster.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DisasterGatewayApp {
+public class DisasterApiApp {
   public static void main(String[] args) {
-    SpringApplication.run(DisasterGatewayApp.class, args);
+    SpringApplication.run(DisasterApiApp.class, args);
   }
 }

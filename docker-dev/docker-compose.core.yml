@@ -9,7 +9,7 @@ services:
   camel-api:
     build:
       context: ../
-      dockerfile: docker/camel/Dockerfile
+      dockerfile: docker/camel-api/Dockerfile
     container_name: dg-dev-camel-core
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -18,11 +18,11 @@ services:
     ports:
       - "${SERVER_PORT:-8088}:8088"
     volumes:
-      - ../app/src/main/resources/inbox:/opt/app/inbox
+      - ../api/src/main/resources/inbox:/opt/app/inbox
       - ./logs:/opt/app/logs
-    depends_on:
-      app-postgres: { condition: service_healthy }
-      keycloak: { condition: service_started }
+    #depends_on:
+      #app-postgres: { condition: service_healthy }
+      #keycloak: { condition: service_started }
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://localhost:8088/actuator/health | grep -q '\"status\":\"UP\"' || exit 1"]
       interval: 10s

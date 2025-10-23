@@ -48,3 +48,10 @@ camel:
   component:
     platform-http:
       enabled: true
+  rest:
+    api:
+      context-path: /api/api-doc
+      api-title: "Camel API"
+      api-version: "1.0"
+      specification-format: yaml              # or json
+      cors: true                             # Enable CORS for OpenAPI docs endpoint

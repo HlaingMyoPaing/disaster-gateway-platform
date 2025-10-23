@@ -1,6 +1,6 @@
-package com.disaster.gateway.routes;
+package com.disaster.api.routes;
 
-import com.disaster.gateway.logging.AccessLogger;
+import com.disaster.api.logging.AccessLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -56,28 +56,21 @@ public class ApiRoutes extends AbstractRouteBuilder {
         // REST configuration (OpenAPI and HTTP component setup)
         restConfiguration()
                 .component("platform-http")
-                .contextPath("/")
-                .apiContextPath("/api/api-doc")
+                .contextPath("/")                   // Base path for your REST services
+                .apiContextPath("/api/api-doc")    // Path where OpenAPI docs are exposed
                 .apiProperty("api.title", "Camel API")
-                .apiProperty("api.version", "1.0");
+                .apiProperty("api.version", "1.0")
+                .apiProperty("cors", "true");    // Enable CORS on docs endpoint
 
         // REST endpoint to route mappings
         rest("/api")
-                .get("/public/hello").to("direct:publicHello")
-                .post("/admin/hello").to("direct:adminHello");
-
-        // Route: publicHello
-        from("direct:publicHello")
-                .routeId("/publicHello")
-                .process(exchange -> AccessLogger.info(exchange, "publicHello"))
-                .setBody().constant("{\"message\":\"Hello from public endpoint\"}")
-                .setHeader("Content-Type", constant("application/json"));
+                .post("/data/get").to("direct:adminGet");
 
         // Route: adminHello
-        from("direct:adminHello")
-                .routeId("/adminHello")
-                .process(exchange -> AccessLogger.info(exchange, "adminHello"))
-                .setBody().constant("{\"message\":\"Hello from ADMIN endpoint\"}")
+        from("direct:adminGet")
+                .routeId("/adminGet")
+                .process(exchange -> AccessLogger.info(exchange, "adminGet"))
+                .setBody().constant("{\"message\":\"Hello from protected endpoint\"}")
                 .setHeader("Content-Type", constant("application/json"));
     }
 }

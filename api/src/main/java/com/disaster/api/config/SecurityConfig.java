@@ -1,4 +1,4 @@
-package com.disaster.gateway.config;
+package com.disaster.api.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
  * Features:
  * <ul>
  *     <li>Disables CSRF for stateless APIs</li>
- *     <li>Allows anonymous access to public endpoints (e.g., {@code /actuator/health}, {@code /api/public/**})</li>
- *     <li>Protects {@code /api/admin/**} endpoints with role-based access (e.g., {@code ROLE_ADMIN})</li>
+ *     <li>Allows anonymous access to public endpoints (e.g., {@code /actuator/health}, {@code /api/api-doc})</li>
+ *     <li>Protects {@code /api/data/**} endpoints with role-based access (e.g., {@code ROLE_ADMIN})</li>
  *     <li>Maps Keycloak realm and client roles to Spring Security authorities</li>
  * </ul>
  */
@@ -58,8 +58,8 @@ public class SecurityConfig {
 
                 // Define access rules
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/health", "/api/public/**", "/api/api-doc").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole(adminRole)
+                        .requestMatchers("/actuator/health", "/api/api-doc").permitAll()
+                        .requestMatchers("/api/data/**").hasRole(adminRole)
                         .anyRequest().authenticated()
                 )
 

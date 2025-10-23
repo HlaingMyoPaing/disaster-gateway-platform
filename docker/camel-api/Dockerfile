@@ -8,19 +8,19 @@ WORKDIR /src
 ENV MAVEN_OPTS="-Dmaven.repo.local=/root/.m2/repository"
 
 # 1) Copy only pom.xml to cache dependencies
-COPY app/pom.xml ./app/pom.xml
+COPY api/pom.xml ./api/pom.xml
 
 # Pre-download dependencies (offline mode)
 RUN --mount=type=cache,target=/root/.m2 \
-    mvn -f app/pom.xml -B -DskipTests dependency:go-offline
+    mvn -f api/pom.xml -B -DskipTests dependency:go-offline
 
 # 2) Copy source files and build the fat JAR
-COPY app/ ./app/
+COPY api/ ./api/
 
 RUN --mount=type=cache,target=/root/.m2 \
-    mvn -f app/pom.xml -B -DskipTests package && \
+    mvn -f api/pom.xml -B -DskipTests package && \
     # copy the produced jar to a deterministic filename for the runtime stage
-    cp app/target/*.jar app/app.jar
+    cp api/target/*.jar api/api.jar
 
 
 # ---------- RUNTIME STAGE ----------
@@ -37,7 +37,7 @@ RUN addgroup --system app && adduser --system --ingroup app --home /home/app app
 WORKDIR /opt/app
 
 # Copy built jar from build stage and set ownership in a single layer
-COPY --from=build --chown=app:app /src/app/app.jar ./app.jar
+COPY --from=build --chown=app:app /src/api/api.jar ./app.jar
 
 # Create logs directory and ensure permissions (owned by app)
 RUN mkdir -p /opt/app/logs && chown -R app:app /opt/app

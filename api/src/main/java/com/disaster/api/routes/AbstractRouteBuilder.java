@@ -1,8 +1,6 @@
-package com.disaster.gateway.routes;
+package com.disaster.api.routes;
 
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 
 /**
  * An abstract base class for defining Apache Camel routes with built-in support for:

@@ -4,8 +4,8 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.disaster.gateway</groupId>
-    <artifactId>disaster-gateway</artifactId>
+    <groupId>com.disaster.api</groupId>
+    <artifactId>disaster-api</artifactId>
     <version>0.1.0</version>
 
     <properties>
