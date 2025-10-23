@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/soap-service",
+    "bodyPatterns": [
+      {
+        "matchesXPath": "//soap:Envelope/soap:Body/MyRequest",
+        "xPathNamespaces": {
+          "soap": "http://schemas.xmlsoap.org/soap/envelope/"
+        }
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "text/xml; charset=utf-8"
+    },
+    "bodyFileName": "soap-response.xml"
+  }
+}

@@ -33,6 +33,8 @@ make up-dev
 Useful URLs (local development)
 - API proxy: http://host.docker.internal:3001/api/public/hello
 - Keycloak Admin Console: http://host.docker.internal:8080
+- WireMock Documentation: http://wiremock.org/docs/
+- WireMock Admin API: http://localhost:8081/__admin
 
 ## Windows: install `make`
 If you're on Windows and want to use the provided Makefile commands, install `make` (e.g. GnuWin32).
